@@ -8,9 +8,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import librosa
 import traceback
+import requests
 
 MODEL_PATH = "model_audio.keras"
-MODEL_URL = "https://drive.google.com/file/d/1liCRCWpmmTSiZammZJrKaB4UIJpnSbZg/view?usp=sharing"
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1liCRCWpmmTSiZammZJrKaB4UIJpnSbZg"
 CSV_PATH = "UrbanSound8K.csv"
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -63,7 +64,9 @@ def init_app():
     else:
         class_mapping.update({i: str(i) for i in range(50)})
 
-
+@app.before_first_request
+def startup():
+    init_app()
 # ------------------------------------------------
 # DYNAMIC SPECTROGRAM PADDING/TRUNCATING — PRESERVES SPEED/PITCH
 # ------------------------------------------------
@@ -171,6 +174,6 @@ def predict_file():
 
 
 if __name__ == "__main__":
-    init_app()
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
