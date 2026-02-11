@@ -28,11 +28,13 @@ def download_model():
         return
 
     print("Downloading model...")
-    r = requests.get(MODEL_URL, stream=True)
-    r.raise_for_status()
+
+    session = requests.Session()
+    response = session.get(MODEL_URL, stream=True)
+    response.raise_for_status()
 
     with open(MODEL_PATH, "wb") as f:
-        for chunk in r.iter_content(chunk_size=8192):
+        for chunk in response.iter_content(8192):
             if chunk:
                 f.write(chunk)
 
@@ -48,6 +50,9 @@ TARGET_FRAMES = 126   # final correct size from model
 
 def init_app():
     global model, class_mapping
+
+    if model is not None:
+        return
 
     download_model()
 
@@ -176,4 +181,5 @@ def predict_file():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
