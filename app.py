@@ -68,10 +68,6 @@ def init_app():
         })
     else:
         class_mapping.update({i: str(i) for i in range(50)})
-
-@app.before_first_request
-def startup():
-    init_app()
 # ------------------------------------------------
 # DYNAMIC SPECTROGRAM PADDING/TRUNCATING — PRESERVES SPEED/PITCH
 # ------------------------------------------------
@@ -111,6 +107,11 @@ def preprocess_audio(path, duration=4):
 # Prediction
 # ------------------------------------------------
 def predict_audio(path):
+    global model
+
+    if model is None:
+        init_app()
+
     arr = preprocess_audio(path)
     pred = model.predict(arr)
     idx = int(np.argmax(pred))
@@ -181,5 +182,6 @@ def predict_file():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
