@@ -11,7 +11,7 @@ import traceback
 import requests
 
 MODEL_PATH = "model_audio.keras"
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1liCRCWpmmTSiZammZJrKaB4UIJpnSbZg"
+MODEL_URL = "https://www.dropbox.com/scl/fi/kitor12tvf178r4x3y0a9/model_audio.keras?rlkey=i57diw2bx9hr9xcyaxzes6432&st=4gk2id96&dl=1"
 CSV_PATH = "UrbanSound8K.csv"
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -182,6 +182,7 @@ def predict_file():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
